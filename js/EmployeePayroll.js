@@ -28,7 +28,10 @@ class EmployeePayrollData{
         if(nameRegex.test(name)){
             this._name = name;
         }
-        else throw 'Name is incorrect: '+name;
+        else{ 
+            alert("Incorrect name");
+            throw "Name is incorrect"+name;
+        }
     }
     get image(){
         return this._image;
@@ -40,10 +43,7 @@ class EmployeePayrollData{
         return this._gender;
     }
     set gender(gender){
-        let genderRegex = RegExp("^[MF]$");
-        if(genderRegex.test(gender))
-            this._gender = gender;
-        else throw "Gender incorrect: "+gender+". Choose M or F";
+        this._gender = gender; 
     }
     get department(){
         return this._department;
@@ -55,21 +55,20 @@ class EmployeePayrollData{
         return this._salary;
     }
     set salary(salary){
-        let salaryRegex = RegExp("^[1-9][0-9]{0,}$");
-        if(salaryRegex.test(salary))
             this._salary = salary;
-        else throw 'Salary is incorrect: '+salary;
     }
-    
     get startDate(){
         return this._startDate;
     }
     set startDate(startDate){
-        if(startDate.getMonth()<=(new Date()).getMonth()
-           &&startDate.getDay()<=(new Date()).getDay()
-           &&startDate.getFullYear()<=(new Date()).getFullYear())
+        if(startDate.getTime()<=(new Date()).getTime()
+        &&((((new Date()).getTime())-(startDate.getTime()))/(1000*60*60*24))<=30 ){
             this._startDate = startDate;
-        else throw "Date is incorrect: "+startDate.toLocaleDateString("en-IN");
+           }
+        else{
+            alert("Incorrect date");
+            throw "Date is incorrect: "+startDate.toLocaleDateString("en-IN");
+        }
     }
 
     //toString
@@ -115,7 +114,7 @@ function save(){
     const day = document.getElementById("day").value;
     const month = document.getElementById("month").value;
     const year = document.getElementById("year").value;
-    let dateString = year+"-"+month+"-"+day+"T00:00:00Z";
+    let dateString = year+"-"+month+"-"+day+"T23:59:00Z";
     date = new Date(dateString);
 
     //notes
