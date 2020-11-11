@@ -137,6 +137,7 @@ select{
     border: 1px solid #969696;
     border-radius: 5px;
     opacity: 1;
+    margin-right: 30px;
 }
 .resetButton{
     background: #E2E2E2 0% 0% no-repeat padding-box;

@@ -5,6 +5,7 @@
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="../css/EmployeePayroll.css">
+        <script type="text/javascript" src="../js/EmployeePayroll.js"></script>
         <title>Employee Payroll Form</title>
     </head>
     <body>
@@ -18,7 +19,7 @@
             </div>
         </header>
         <div class="form-content">
-            <form class="form" action="#" onsubmit="save(event);return false";>
+            <form class="form" action="#" onsubmit="save();return false";>
                 <div class="form-head">
                     Employee Payroll Form
                 </div>
@@ -73,7 +74,7 @@
                 </div>
                 <div class="row-content">
                     <label class="label text" for="salary">Choose your salary: </label>
-                    <input class="input" type="range" name="salary" id="salary" min="300000" max="500000" step="100" value="400000">
+                    <input class="input" type="range" name="salary" id="salary" min="300000" max="500000" step="100" value="400000" oninput="updateSalary()">
                     <output class="salary-output text" for="salary">400000</output>
                 </div>
                 <div class="row-content">
@@ -148,13 +149,5 @@
                 </div>
             </form>
         </div>
-        <script>
-            const salary = document.querySelector('#salary');
-            const output = document.querySelector(".salary-output");
-            output.textContent = salary.value;
-            salary.addEventListener('input',function(){
-                output.textContent = salary.value;
-            });
-        </script>
     </body>
 </html>
