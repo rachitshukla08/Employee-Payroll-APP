@@ -1,3 +1,34 @@
+window.addEventListener("DOMContentLoaded",(event)=>{
+    const name = document.querySelector('#name');
+    const textError = document.querySelector(".text-error");         
+    name.addEventListener('input',function(){
+    let nameRegex = RegExp("^[A-Z]{1}[a-z]{2,}$");
+        if(nameRegex.test(name.value)||name.value.length==0)
+            textError.textContent="";
+        else 
+            textError.textContent="Name is invalid";
+        });
+
+    let day = document.getElementById("day");
+    let month = document.getElementById("month");
+    let year = document.getElementById("year");
+    let dateError = document.querySelector(".date-error");    
+    day.addEventListener('click',checkDate);
+    month.addEventListener('click',checkDate);
+    year.addEventListener('click',checkDate);
+    function checkDate(){
+        let dateString = year.value+"-"+month.value+"-"+day.value+"T00:00:00Z";
+        date = new Date(dateString);
+        console.log(date);
+        if(date.getTime()<=(new Date()).getTime()
+        &&((((new Date()).getTime())-(date.getTime()))/(1000*60*60*24))<=30 ){
+            dateError.textContent = "";
+        }
+        else 
+            dateError.textContent="Date is invalid";
+    }
+});
+
 function updateSalary(){
     const salary = document.querySelector('#salary');
     const output = document.querySelector(".salary-output");
@@ -114,13 +145,17 @@ function save(){
     const day = document.getElementById("day").value;
     const month = document.getElementById("month").value;
     const year = document.getElementById("year").value;
-    let dateString = year+"-"+month+"-"+day+"T23:59:00Z";
+    let dateString = year+"-"+month+"-"+day+"T00:00:00Z";
     date = new Date(dateString);
 
     //notes
     const notes = document.getElementById("notes").value;
-
-    let employeePayrollData = new EmployeePayrollData(name,profileImage,gender,departments,salary,date,notes);
+    try{
+        employeePayrollData = new EmployeePayrollData(name,profileImage,gender,departments,salary,date,notes);
+    }
+    catch(e){
+        console.error(e);
+    }
     console.log(employeePayrollData.toString());
     console.log(employeePayrollData.department);
 }
