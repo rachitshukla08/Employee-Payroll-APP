@@ -154,8 +154,11 @@ function save(){
         employeePayrollData = new EmployeePayrollData(name,profileImage,gender,departments,salary,date,notes);
     }
     catch(e){
+        alert("Please enter proper details");
         console.error(e);
     }
+    alert(employeePayrollData.toString());
     console.log(employeePayrollData.toString());
     console.log(employeePayrollData.department);
+    employeePayrollData = undefined;
 }
