@@ -107,7 +107,7 @@ class EmployeePayrollData{
         const options = {year: 'numeric', month: 'numeric', day:'numeric'};
         const empDate = this.startDate == undefined ? "undefined":
                         this.startDate.toLocaleDateString("en-IN",options);
-        return "Name = "+this.name +",gender = "+this.gender+",departments = "+this.department+",salary = "+this.salary+",start date = "+empDate;
+        return "Name = "+this.name +", Gender = "+this.gender+", Departments = "+this.department+", Salary = "+this.salary+", Start date = "+empDate;
     }
 }
 
@@ -160,5 +160,22 @@ function save(){
     alert(employeePayrollData.toString());
     console.log(employeePayrollData.toString());
     console.log(employeePayrollData.department);
+
+    if(employeePayrollData.name!=undefined&&employeePayrollData.startDate!=undefined)
+        createAndUpdateStorage(employeePayrollData);
+        
     employeePayrollData = undefined;
+}
+
+function createAndUpdateStorage(employeePayrollData){
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+
+    if(employeePayrollList!=undefined){
+        employeePayrollList.push(employeePayrollData);
+    }
+    else{
+        employeePayrollList = [employeePayrollData];
+    }
+    alert(employeePayrollList.toString());
+    localStorage.setItem("EmployeePayrollList",JSON.stringify(employeePayrollList));
 }
