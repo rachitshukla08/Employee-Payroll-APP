@@ -6,7 +6,7 @@ function updateSalary(){
         output.textContent = salary.value;
     });
 }
-
+//Employee Payroll Class
 class EmployeePayrollData{
     //constructor
     constructor(...params){
