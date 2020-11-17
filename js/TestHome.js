@@ -1,16 +1,20 @@
+let empPayrollList;
 window.addEventListener('DOMContentLoaded',(event)=>{
+    empPayrollList = getEmployeePayrollDataFromStorage();
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
     createInnerHtml();
 });
 
 const createInnerHtml = () => {
+    if(empPayrollList.length==0) return;
     const headerHtml = "<th></th><th>Name</th><th>Gender</th><th>Department</th>"
                         +"<th>Salary</th><th>Start Date</th><th>Actions</th>";
     let innerHtml = `${headerHtml}`;
-    let employeePayrollList = createEmployeePayrollJSON();
-    for(const employeePayrollData of employeePayrollList){
+    //let employeePayrollList = createEmployeePayrollJSON();
+    for(const employeePayrollData of empPayrollList){
         innerHtml = `${innerHtml}
         <tr>
-            <td><img class="profile" alt="" src="${employeePayrollData._profilePic}">
+            <td><img class="profile" alt="" src="${employeePayrollData._image}">
         </td>
         <td>${employeePayrollData._name}</td>
         <td>${employeePayrollData._gender}</td>
@@ -29,35 +33,6 @@ const createInnerHtml = () => {
     document.querySelector('#table-display').innerHTML = innerHtml;
 }
 
-const createEmployeePayrollJSON = () => {
-    let employeePayrollListLocal = [
-        {
-            _name: "Narayan Mahadevan",
-            _gender: "M",
-            _department: [
-                "Engineering",
-                "Finance"
-            ],
-            _salary: "500000",
-            _startDate: "29 Oct 2019",
-            _note: '',
-            _profilePic: "../assets/profile-images/Ellipse -2.png"
-        },
-        {
-            _name: "Amarpa",
-            _gender: "F",
-            _department: [
-                "Sales"
-            ],
-            _salary: "400000",
-            _startDate: "29 Oct 2019",
-            _note: '',
-            _profilePic: "../assets/profile-images/Ellipse -1.png"
-        }
-    ];
-    return employeePayrollListLocal;
-}
-
 const getDeptHtml = (deptList) =>{
     let deptHtml = '';
     for(const dept of deptList){
@@ -65,3 +40,10 @@ const getDeptHtml = (deptList) =>{
     }
     return deptHtml;
 }
+
+const getEmployeePayrollDataFromStorage = () => {
+    console.log(localStorage.getItem('EmployeePayrollList'));
+    return localStorage.getItem('EmployeePayrollList')?
+                                JSON.parse(localStorage.getItem('EmployeePayrollList')):[];
+}
+
