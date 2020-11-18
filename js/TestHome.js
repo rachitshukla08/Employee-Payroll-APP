@@ -22,9 +22,9 @@ const createInnerHtml = () => {
         <td>${employeePayrollData._salary}</td>
         <td>${employeePayrollData._startDate}</td>
         <td>
-            <img id="1" onclick="remove(this)" alt="delete"
+            <img id="${employeePayrollData._id}" onclick="remove(this)" alt="remove"
                 src="../assets/icons/delete-black-18dp.svg">
-            <img id="1" alt="edit" onclick="update(this)" 
+            <img id="${employeePayrollData._id}" alt="edit" onclick="update(this)" 
                 src="../assets/icons/create-black-18dp.svg">
         </td>
         </tr>
@@ -45,5 +45,17 @@ const getEmployeePayrollDataFromStorage = () => {
     console.log(localStorage.getItem('EmployeePayrollList'));
     return localStorage.getItem('EmployeePayrollList')?
                                 JSON.parse(localStorage.getItem('EmployeePayrollList')):[];
+}
+
+const remove = (node) => {
+    let employeePayrollData = empPayrollList.find(empData => empData._id = node.id);
+    if(!employeePayrollData) 
+        return;
+    const index = empPayrollList.map(empData=>empData._id)
+                                .indexOf(employeePayrollData._id);
+    empPayrollList.splice(index,1);
+    localStorage.setItem('EmployeePayrollList',JSON.stringify(empPayrollList));
+    document.querySelector('.emp-count').textContent = empPayrollList.length;
+    createInnerHtml();
 }
 
