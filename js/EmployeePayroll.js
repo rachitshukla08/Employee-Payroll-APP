@@ -129,69 +129,93 @@ class EmployeePayrollData{
     }
 }
 
-function save(){
-    //name
-    const name = document.querySelector("#name").value;
-
-    //profile image
-    const images = document.getElementsByName("profile");
-    let profileImage=images[0];
-    for(let i=0;i<images.length;i++){
-        if(images[i].checked)
-            profileImage=images[i].value;
-    }
-
-    //gender
-    let genders = document.getElementsByName("gender");
-    for(let i=0;i<genders.length;i++){
-        if(genders[i].checked)
-            gender=genders[i].value;
-    }
-
-    //departments
-    let departments = new Array();
-    const departmentsForm = document.getElementsByClassName("checkbox");
-    for(let i=0;i<departmentsForm.length;i++){
-        if(departmentsForm[i].checked)
-            departments.push(departmentsForm[i].value);
-    }
-    
-    //salary
-    const salary = document.querySelector("#salary").value;
-
-    //start date
-    const day = document.getElementById("day").value;
-    const month = document.getElementById("month").value;
-    const year = document.getElementById("year").value;
-    let dateString = year+"-"+month+"-"+day+"T00:00:00Z";
-    date = new Date(dateString);
-
-    //notes
-    const notes = document.getElementById("notes").value;
-    
+function save(event){
     try{
-        let id = new Date().getTime();
-        employeePayrollData = new EmployeePayrollData(name,profileImage,gender,departments,salary,date,notes,id);
+        setEmployeePayrollObject();
+    }catch(e){
+        return;
+    }
+    alert(employeePayrollObj.toString());
+    console.log(employeePayrollObj.toString());
+    console.log(employeePayrollObj.department);
+
+    if(employeePayrollObj.name!=undefined&&employeePayrollObj.startDate!=undefined)
+        createAndUpdateStorage();
+    employeePayrollObj = undefined;
+}
+
+function setEmployeePayrollObject(){
+     //name
+     const name = document.querySelector("#name").value;
+
+     //profile image
+     const images = document.getElementsByName("profile");
+     let profileImage=images[0];
+     for(let i=0;i<images.length;i++){
+         if(images[i].checked)
+             profileImage=images[i].value;
+     }
+ 
+     //gender
+     let genders = document.getElementsByName("gender");
+     for(let i=0;i<genders.length;i++){
+         if(genders[i].checked)
+             gender=genders[i].value;
+     }
+ 
+     //departments
+     let departments = new Array();
+     const departmentsForm = document.getElementsByClassName("checkbox");
+     for(let i=0;i<departmentsForm.length;i++){
+         if(departmentsForm[i].checked)
+             departments.push(departmentsForm[i].value);
+     }
+     
+     //salary
+     const salary = document.querySelector("#salary").value;
+ 
+     //start date
+     const day = document.getElementById("day").value;
+     const month = document.getElementById("month").value;
+     const year = document.getElementById("year").value;
+     let dateString = year+"-"+month+"-"+day+"T00:00:00Z";
+     date = new Date(dateString);
+ 
+     //notes
+     
+    const notes = document.getElementById("notes").value; 
+    try{
+        console.log(employeePayrollObj);
+        if(employeePayrollObj._id==undefined){
+            let id = new Date().getTime();
+            employeePayrollObj = new EmployeePayrollData(name,profileImage,gender,departments,salary,date,notes,id);
+        }
+        else {
+            let id = employeePayrollObj._id;
+            employeePayrollObj = new EmployeePayrollData(name,profileImage,gender,departments,salary,date,notes,id);
+        }
     }
     catch(e){
+        alert(e);
         alert("Please enter proper details");
         console.error(e);
     }
-    alert(employeePayrollData.toString());
-    console.log(employeePayrollData.toString());
-    console.log(employeePayrollData.department);
-
-    if(employeePayrollData.name!=undefined&&employeePayrollData.startDate!=undefined)
-        createAndUpdateStorage(employeePayrollData);
-        
-    employeePayrollData = undefined;
 }
 
-function createAndUpdateStorage(employeePayrollData){
+function createAndUpdateStorage(){
     let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
 
     if(employeePayrollList!=undefined){
-        employeePayrollList.push(employeePayrollData);
+        let employeePayrollData = employeePayrollList.find(empData=>empData._id ==employeePayrollObj._id);
+        console.log(employeePayrollData);
+        if(!employeePayrollData){
+            employeePayrollList.push(employeePayrollObj);
+            console.log("PUSHED");
+        } else {
+            const index = employeePayrollList.map(empData=>empData._id).indexOf(employeePayrollData._id);
+            employeePayrollList.splice(index,1,employeePayrollObj);
+            console.log("SPLICED");
+        }
     }
     else{
         employeePayrollList = [employeePayrollData];
@@ -225,6 +249,7 @@ const checkForUpdate = () =>{
     isUpdate = employeePayrollJSON ? true :false;
     if(!isUpdate) return;
     employeePayrollObj = JSON.parse(employeePayrollJSON);
+    console.log(employeePayrollObj);
     setForm();
 }
 
