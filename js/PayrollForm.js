@@ -4,7 +4,7 @@ window.addEventListener("DOMContentLoaded",(event)=>{
     const name = document.querySelector('#name');
     const textError = document.querySelector(".text-error");         
     name.addEventListener('input',function(){
-    let nameRegex = RegExp("^[A-Z]{1}[a-z]{2,}$");
+    let nameRegex = RegExp("^[A-Z]{1}[A-Za-z\\s]{2,}$");
         if(nameRegex.test(name.value)||name.value.length==0)
             textError.textContent="";
         else 
@@ -54,8 +54,10 @@ function save(event){
     console.log(employeePayrollObj._date);
     if(employeePayrollObj._name!=undefined&&employeePayrollObj._date!=undefined){
         console.log(employeePayrollObj);
-        if(site_properties.use_local_storage.match("true"))
+        if(site_properties.use_local_storage.match("true")){
             createAndUpdateStorage();
+        }else 
+            createOrUpdateEmployeePayroll();
     }
     employeePayrollObj = undefined;
 }
@@ -109,7 +111,7 @@ function setEmployeePayrollObject(){
             employeePayrollObj._salary = salary;
             employeePayrollObj._date = date;
             employeePayrollObj._note = notes;
-            if(!isUpdate){
+            if(!isUpdate&&site_properties.use_local_storage.match("true")){
                 employeePayrollObj.id = createNewEmployeeId();
             }
             console.log(employeePayrollObj);
@@ -125,6 +127,24 @@ function setEmployeePayrollObject(){
 const createNewEmployeeId = ()=>{
     let empId = new Date().getTime();
     return empId;
+}
+const createOrUpdateEmployeePayroll = () =>{
+    let postURL = site_properties.server_url;
+    let methodCall = "POST";
+    if(isUpdate){
+        alert("Updating to server");
+        methodCall = "PUT";
+        postURL = postURL + employeePayrollObj.id.toString();
+    } else  alert("Adding to server");
+    makeServicecall(methodCall,postURL,true,employeePayrollObj)
+        .then(responseText => {
+                resetForm();
+                window.location.replace(site_properties.home_page);
+            })
+        .catch(error=>{
+                alert(error);
+                throw error;
+    });
 }
 
 function createAndUpdateStorage(){
