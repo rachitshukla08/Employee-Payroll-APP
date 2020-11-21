@@ -15,17 +15,17 @@ const createInnerHtml = () => {
     for(const employeePayrollData of empPayrollList){
         innerHtml = `${innerHtml}
         <tr>
-            <td><img class="profile" alt="" src="${employeePayrollData._image}">
+            <td><img class="profile" alt="" src="${employeePayrollData._profilePic}">
         </td>
         <td>${employeePayrollData._name}</td>
         <td>${employeePayrollData._gender}</td>
         <td>${getDeptHtml(employeePayrollData._department)}</td>
         <td>${employeePayrollData._salary}</td>
-        <td>${stringifyDate(employeePayrollData._startDate)}</td>
+        <td>${stringifyDate(employeePayrollData._date)}</td>
         <td>
-            <img id="${employeePayrollData._id}" onclick="remove(this)" alt="remove"
+            <img id="${employeePayrollData.id}" onclick="remove(this)" alt="remove"
                 src="../assets/icons/delete-black-18dp.svg">
-            <img id="${employeePayrollData._id}" alt="edit" onclick="update(this)" 
+            <img id="${employeePayrollData.id}" alt="edit" onclick="update(this)" 
                 src="../assets/icons/create-black-18dp.svg">
         </td>
         </tr>
@@ -50,11 +50,11 @@ const getEmployeePayrollDataFromStorage = () => {
 
 const remove = (node) => {
     console.log(node.id);
-    let employeePayrollData = empPayrollList.find(empData => empData._id == node.id);
+    let employeePayrollData = empPayrollList.find(empData => empData.id == node.id);
     if(!employeePayrollData) 
         return;
-    const index = empPayrollList.map(empData=>empData._id)
-                                .indexOf(employeePayrollData._id);
+    const index = empPayrollList.map(empData=>empData.id)
+                                .indexOf(employeePayrollData.id);
     console.log(index);
     empPayrollList.splice(index,1);
     localStorage.setItem('EmployeePayrollList',JSON.stringify(empPayrollList));
@@ -63,7 +63,7 @@ const remove = (node) => {
 }
 
 const update = (node) => {
-    let empPayrollData = empPayrollList.find(empData => empData._id == node.id);
+    let empPayrollData = empPayrollList.find(empData => empData.id == node.id);
     if(!empPayrollData) 
         return;
     localStorage.setItem('editEmp',JSON.stringify(empPayrollData))
